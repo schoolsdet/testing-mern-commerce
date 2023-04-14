@@ -3,9 +3,8 @@ const chaiSubset = require('chai-subset');
 chai.use(chaiSubset);
 const expect  =chai.expect;
 const casual = require('casual');
-const superagent = require('superagent');
-
-const baseUrl = "https://mern-ecommerce.sdet.school/api";
+const clientAddress = require("../src/client/address");
+const clientAuth = require("../src/client/auth");
 
 describe("Test address endpoints", ()=> {
     let token;
@@ -16,19 +15,15 @@ describe("Test address endpoints", ()=> {
             password: "Password1"
           }
           try {
-            const response = await superagent.post(baseUrl+"/auth/login").send(reqBody);
+            const response = await clientAuth.login(reqBody);
             token = response.body.token;
           } catch (error) {
-            console.log("catch?")
             console.error(error.message);
           }
     });
     
     it("should add address to user",async () =>{
         const {street,city,state} = casual;
-        // const street = casual.street;
-        // const city = casual.city;
-        // const state = casual.state;
         const zip = casual.zip(5)
         const addressOpt = {
           isDefault: true,
@@ -39,12 +34,12 @@ describe("Test address endpoints", ()=> {
           zipCode: zip,
         }
         let response
+        const opts = {
+          token,
+          address: addressOpt
+        }
         try {
-          response = await superagent.post(baseUrl+"/address/add")
-          .set({
-              Authorization: token
-            })
-            .send(addressOpt)
+          response = await clientAddress.addAddress(opts)
         } catch(err){
           console.log(err.message)
         }
@@ -63,4 +58,19 @@ describe("Test address endpoints", ()=> {
           }
         });
     });
+    it.only("should register user", async()=>{
+      const opts = {
+        "email": "user111111111111@email.com",
+        "firstName": "Harold",
+        "lastName": "Olsen",
+        "password": "Password1"
+      }
+      let response;
+      try {
+        response = await clientAuth.register(opts)
+      } catch(err){
+        console.log(err)
+      }
+      console.log(response)
+    })
 });
