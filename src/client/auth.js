@@ -3,7 +3,7 @@ const superagent = require('superagent');
 const baseUrl = "https://mern-ecommerce.sdet.school/api";
 
 /**
- * Adding address to user
+ * Login
  * 
  *  @param {object} opts - params passed in
  *  @param {string} opts.email - user's email
@@ -23,7 +23,7 @@ const login = (opts) =>{
 }
 
 /**
- * Adding address to user
+ * Register new user
  * 
  *  @param {object} userInfo - params passed in
  *  @param {boolean} [userInfo.isSubscribed] - false by default
