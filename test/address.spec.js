@@ -5,22 +5,23 @@ const expect  =chai.expect;
 const casual = require('casual');
 const clientAddress = require("../src/client/address");
 const clientAuth = require("../src/client/auth");
+const {User} = require("../src/users/user") 
 
 describe("Test address endpoints", ()=> {
     let token;
-    beforeEach(async ()=> {
-        // Login as  Olsen  X
-        const reqBody = {
-            email: "Olsen.X@gmail.com",
-            password: "Password1"
-          }
-          try {
-            const response = await clientAuth.login(reqBody);
-            token = response.body.token;
-          } catch (error) {
-            console.error(error.message);
-          }
-    });
+    // beforeEach(async ()=> {
+    //     // Login as  Olsen  X
+    //     const reqBody = {
+    //         email: "Olsen.X@gmail.com",
+    //         password: "Password1"
+    //       }
+    //       try {
+    //         const response = await clientAuth.login(reqBody);
+    //         token = response.body.token;
+    //       } catch (error) {
+    //         console.error(error.message);
+    //       }
+    // });
     
     it("should add address to user",async () =>{
         const {street,city,state} = casual;
@@ -58,7 +59,7 @@ describe("Test address endpoints", ()=> {
           }
         });
     });
-    it.only("should register user", async()=>{
+    it("should register user", async()=>{
       const opts = {
         "email": "user111111111111@email.com",
         "firstName": "Harold",
@@ -73,4 +74,9 @@ describe("Test address endpoints", ()=> {
       }
       console.log(response)
     })
+    it.only("should create a User",async()=>{
+      const user = new User();
+      await user.register();
+    })
+    
 });
