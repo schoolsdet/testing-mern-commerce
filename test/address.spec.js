@@ -9,19 +9,19 @@ const {User} = require("../src/users/user")
 
 describe("Test address endpoints", ()=> {
     let token;
-    // beforeEach(async ()=> {
-    //     // Login as  Olsen  X
-    //     const reqBody = {
-    //         email: "Olsen.X@gmail.com",
-    //         password: "Password1"
-    //       }
-    //       try {
-    //         const response = await clientAuth.login(reqBody);
-    //         token = response.body.token;
-    //       } catch (error) {
-    //         console.error(error.message);
-    //       }
-    // });
+    beforeEach(async ()=> {
+        // Login as  Olsen  X
+        const reqBody = {
+            email: "Olsen.X@gmail.com",
+            password: "Password1"
+          }
+          try {
+            const response = await clientAuth.login(reqBody);
+            token = response.body.token;
+          } catch (error) {
+            console.error(error.message);
+          }
+    });
     
     it("should add address to user",async () =>{
         const {street,city,state} = casual;
@@ -75,8 +75,8 @@ describe("Test address endpoints", ()=> {
       console.log(response)
     })
     it.only("should create a User",async()=>{
-      const user = new User();
-      await user.register();
+      const user = await User.createUser();
+      const addressResponse = await user.addAddress();
     })
     
 });
