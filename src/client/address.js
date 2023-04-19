@@ -1,6 +1,6 @@
 const superagent = require('superagent');
 
-const baseUrl = "https://mern-ecommerce.sdet.school/api";
+const baseUrl = 'https://mern-ecommerce.sdet.school/api';
 
 /**
  * Adding address to user
@@ -11,14 +11,14 @@ const baseUrl = "https://mern-ecommerce.sdet.school/api";
  * 
  * @returns {Promise<object>}
  */
-const addAddress = (opts) =>{
-    const authHeader = {
-        Authorization: opts.token
-      }
-    if(opts.token === null) {
-        throw new Error("addAddress: token required param");
-    }
-    return superagent.post(baseUrl+"/address/add").set(authHeader).send(opts.address);
-}
+const addAddress = (opts) => {
+  const authHeader = {
+    Authorization: opts.token
+  };
+  if(opts.token === null) {
+    throw new Error('addAddress: token required param');
+  }
+  return superagent.post(baseUrl+'/address/add').set(authHeader).send(opts.address);
+};
 
-module.exports = {addAddress};
+module.exports = { addAddress };
