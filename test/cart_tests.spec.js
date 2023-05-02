@@ -6,7 +6,7 @@ const WelcomePage = require('../src/page_objects/welcome_page');
 
 const sleep = async (ms) => { return new Promise((resolve) => { return setTimeout(resolve, ms); }); };
 
-describe.skip('Login functionality', () => {
+describe.only('Cart functionality', () => {
   let browser;
   let context;
   let page;
@@ -31,20 +31,35 @@ describe.skip('Login functionality', () => {
     await page.close();
     await browser.close();
   });
-  it('should login and open dashboard if credentials are correct', async () => {
+  it.skip('should place product to the cart', async () => {
     const welcome = new WelcomePage(page);
-    welcome.open();
-    const loginPage = await welcome.openLoginPage();
-    const credentials = { username, password };
-    const dashboardPage = await loginPage.login(credentials);
-    expect(await dashboardPage.isOpen()).to.equal('Member');
+    await welcome.open();
+    const productPage = await welcome.search('nike', 2);
+    
+
+
   });
-  it('should show error notification if credentials are incorrect', async () => {
+  it('should throw an error if product not exist', async () => {
     const welcome = new WelcomePage(page);
-    welcome.open();
-    const loginPage = await welcome.openLoginPage();
-    const credentials = { username, password: 'wrongPassword' };
-    await loginPage.login(credentials);
-    expect(await loginPage.isError()).to.be.true;
+    await welcome.open();
+    let error;
+    try{
+      await welcome.search('bike', 2);
+    } catch(err) {
+      error = err;
+    }
+    expect(error.message).to.include('Timeout');
+    
+  });
+  it('should throw an error if product out of bounds', async () => {
+    const welcome = new WelcomePage(page);
+    await welcome.open();
+    let error;
+    try{
+      await welcome.search('nike', 5);
+    } catch(err) {
+      error=err;
+    }
+    expect(error.message).to.be.equal('search index out of bounds');
   });
 });
