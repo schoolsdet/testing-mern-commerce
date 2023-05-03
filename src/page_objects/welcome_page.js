@@ -1,4 +1,4 @@
-const LoginPage = require('./login_page');
+const LoginPage = require('./login_page.js');
 const ProductPage= require('./product_page');
 
 class WelcomePage {

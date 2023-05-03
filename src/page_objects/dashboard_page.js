@@ -1,3 +1,5 @@
+const DrawerPage = require('./drawer_page');
+
 class DasboardPage {
   constructor(page) {
     this.page = page;
@@ -5,6 +7,10 @@ class DasboardPage {
   async isOpen() {
     const element = await this.page.locator('//*[@class="role member "]');
     return element.textContent();
+  }
+  async openCart() {
+    await this.page.locator('.bag-icon').click();
+    return new DrawerPage(this.page);
   }
 
 }
