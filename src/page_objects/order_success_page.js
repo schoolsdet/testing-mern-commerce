@@ -2,10 +2,10 @@ class OrderSuccessPage {
   constructor(page) {
     this.page = page;
   }
-  async getOrdferId() {
-    const text = this.page.locator('.order-label').textContent();
-    console.log(text);
+  async getOrderId() {
+    const text = await this.page.locator('.order-label').textContent();
+    return text.substring(1);
   }
 }
 
-module.exports = OrderSuccessPage;
+export default OrderSuccessPage;

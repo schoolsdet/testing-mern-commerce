@@ -2,13 +2,15 @@
     "plugins": ["mocha"],
     "env": {
         "browser": true,
-        "commonjs": true,
-        "es2021": true
+        "commonjs": false,
+        "es2021": true,
+        "es6":true
     },
     "overrides": [
     ],
     "parserOptions": {
-        "ecmaVersion": "latest"
+        "ecmaVersion": "latest",
+        "sourceType": "module"
     },
     "rules": {
         "indent": [

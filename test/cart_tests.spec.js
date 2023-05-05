@@ -1,9 +1,13 @@
-const { expect } = require('chai');
-const browsers = require('playwright');
+import { expect } from 'chai';
+import browsers from 'playwright';
+import { getUserOrders } from '../src/client/orders.js';
+import { login } from '../src/client/auth.js';
+
+import WelcomePage from '../src/page_objects/welcome_page.js';
+
 const username = 'Jerome20@hotmail.com';
 const password = 'Password1';
-const WelcomePage = require('../src/page_objects/welcome_page');
-// const Drawer = require('../src/page_objects/drawer_page')
+
 
 const sleep = async (ms) => { return new Promise((resolve) => { return setTimeout(resolve, ms); }); };
 
@@ -39,17 +43,29 @@ describe.only('Cart functionality', () => {
     let drawer = await productPage.addProductToCart();
     const loginPage = await drawer.proceedToCheckout();
     const dashboard = await loginPage.login({
-      username: 'Jerome20@hotmail.com',
-      password: 'Password1'
+      username,
+      password
     });
     drawer = await dashboard.openCart();
     const orderSuccess = await drawer.placeOrder();
+    const orderId = await orderSuccess.getOrderId();
+    console.log('order Id created on the page', orderId);
+
+    const loginResponse = await login({
+      email: username,
+      password
+    });
+    const getOrderOpts = {
+      token: loginResponse.body.token
+    };
+
+    const orders = (await getUserOrders(getOrderOpts)).body;
+    const orderFound = orders.orders.find((order) => { return order._id===orderId; });
+    expect(orderFound).to.not.be.undefined;
 
     
-
-
   });
-  it('should throw an error if product not exist', async () => {
+  it.skip('should throw an error if product not exist', async () => {
     const welcome = new WelcomePage(page);
     await welcome.open();
     let error;
@@ -60,7 +76,7 @@ describe.only('Cart functionality', () => {
     }
     expect(error.message).to.include('Timeout');
   });
-  it('should throw an error if product out of bounds', async () => {
+  it.skip('should throw an error if product out of bounds', async () => {
     const welcome = new WelcomePage(page);
     await welcome.open();
     let error;

@@ -1,4 +1,4 @@
-const superagent = require('superagent');
+import superagent from 'superagent';
 
 const baseUrl = 'https://mern-ecommerce.sdet.school/api';
 
@@ -11,7 +11,7 @@ const baseUrl = 'https://mern-ecommerce.sdet.school/api';
  * 
  * @returns {Promise<object>}
  */
-const login = (opts) => {
+export const login = (opts) => {
   if(opts.email === null || opts.password=== null) {
     throw new Error('login: required param not passed');
   }
@@ -34,8 +34,6 @@ const login = (opts) => {
  * 
  * @returns {Promise<object>}
  */
-const register = (userInfo) => {
+export const register = (userInfo) => {
   return superagent.post(baseUrl+'/auth/register').send(userInfo);
 };
-
-module.exports = { login, register };

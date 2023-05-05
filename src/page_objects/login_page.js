@@ -1,4 +1,4 @@
-const DashboardPage = require('./dashboard_page');
+import DashboardPage from './dashboard_page.js';
 
 class LoginPage {
   constructor(page) {
@@ -9,7 +9,7 @@ class LoginPage {
    * 
    * @param {object} opt - params passed in
    * @param {string} opt.username - user name
-   * @param {string} opts.password - password
+   * @param {string} opt.password - password
    */
   async login(opt) {
     await this.page.locator('(//*[@name="email"])[1]').fill(opt.username);
@@ -23,4 +23,4 @@ class LoginPage {
   }
 }
 
-module.exports = LoginPage;
+export default LoginPage;

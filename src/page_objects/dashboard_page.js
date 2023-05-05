@@ -1,4 +1,4 @@
-const DrawerPage = require('./drawer_page');
+import DrawerPage from './drawer_page.js';
 
 class DasboardPage {
   constructor(page) {
@@ -9,9 +9,9 @@ class DasboardPage {
     return element.textContent();
   }
   async openCart() {
-    await this.page.locator('.bag-icon').click();
+    await this.page.locator('.bag-icon').nth(1).click();
     return new DrawerPage(this.page);
   }
 
 }
-module.exports = DasboardPage;
+export default DasboardPage;

@@ -1,5 +1,5 @@
-const LoginPage = require('./login_page.js');
-const ProductPage= require('./product_page');
+import LoginPage from './login_page.js';
+import ProductPage from './product_page.js';
 
 class WelcomePage {
   constructor(page) {
@@ -32,4 +32,4 @@ class WelcomePage {
   }
 }
 
-module.exports = WelcomePage;
+export default WelcomePage;

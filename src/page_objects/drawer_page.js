@@ -1,5 +1,5 @@
-const OrderSuccessPage = require('./order_success_page');
-const LoginPage = require('./login_page.js');
+import OrderSuccessPage from './order_success_page.js';
+import LoginPage from './login_page.js';
 
 class DrawerPage {
   constructor(page) {
@@ -15,6 +15,5 @@ class DrawerPage {
     await this.page.getByText('Place Order').click();
     return new OrderSuccessPage(this.page);
   }
-
 }
-module.exports = DrawerPage;
+export default DrawerPage;
