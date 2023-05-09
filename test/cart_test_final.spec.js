@@ -1,17 +1,14 @@
-import { expect } from 'chai';
+import { expect, use } from 'chai';
 import browsers from 'playwright';
 import { getUserOrders } from '../src/client/orders.js';
 import { login } from '../src/client/auth.js';
+import User from '../src/users/user.js';
 
 import WelcomePage from '../src/page_objects/welcome_page.js';
 
-const username = 'Jerome20@hotmail.com';
-const password = 'Password1';
+const sleep = async (ms) => { return new Promise((resolve) => { return setTimeout(resolve, ms); }); };
 
-
-
-
-describe.skip('Cart functionality', () => {
+describe.only('Create user, and adding products to the cart and create order', () => {
   let browser;
   let context;
   let page;
@@ -30,61 +27,47 @@ describe.skip('Cart functionality', () => {
     await context.setDefaultTimeout(5000);
     page = await context.newPage();
   });
-  
+    
   afterEach(async() => {
-    await sleep(6000);
+    await sleep(3000);
     await page.close();
     await browser.close();
   });
-  it('should place product to the cart', async () => {
+  it('should create an order', async () => {
+    // Creating a user
+    const user = await User.User.createUser();
+    console.log('username', user.email);
+    // Adding address to user
+    await user.addAddress();
+
     const welcome = new WelcomePage(page);
+    // open web application
     await welcome.open();
+    // searchig for Nike and choosing third one
     const productPage = await welcome.search('nike', 2);
+    // on the product page adding it to the cart
     let drawer = await productPage.addProductToCart();
+    // proceed to checkout
     const loginPage = await drawer.proceedToCheckout();
+    // loging to the app - using new username and password (just generated)
     const dashboard = await loginPage.login({
-      username,
-      password
+      username: user.email,
+      password: user.password
     });
+    // opening cart
     drawer = await dashboard.openCart();
+    //placing order
     const orderSuccess = await drawer.placeOrder();
+    // saving order id
     const orderId = await orderSuccess.getOrderId();
     console.log('order Id created on the page', orderId);
-
-    const loginResponse = await login({
-      email: username,
-      password
-    });
+    // making API call to fetch user orders
     const getOrderOpts = {
-      token: loginResponse.body.token
+      token: user.token
     };
-
     const orders = (await getUserOrders(getOrderOpts)).body;
+    // Searching for order
     const orderFound = orders.orders.find((order) => { return order._id===orderId; });
     expect(orderFound).to.not.be.undefined;
-
-    
-  });
-  it.skip('should throw an error if product not exist', async () => {
-    const welcome = new WelcomePage(page);
-    await welcome.open();
-    let error;
-    try{
-      await welcome.search('bike', 2);
-    } catch(err) {
-      error = err;
-    }
-    expect(error.message).to.include('Timeout');
-  });
-  it.skip('should throw an error if product out of bounds', async () => {
-    const welcome = new WelcomePage(page);
-    await welcome.open();
-    let error;
-    try{
-      await welcome.search('nike', 5);
-    } catch(err) {
-      error=err;
-    }
-    expect(error.message).to.be.equal('search index out of bounds');
   });
 });

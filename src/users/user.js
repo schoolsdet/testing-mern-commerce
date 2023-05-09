@@ -1,5 +1,5 @@
 import helper from '../helper/userGenerator.js';
-import auth from '../client/auth.js';
+import { login, register } from '../client/auth.js';
 import address from '../client/address.js';
 
 class User {
@@ -43,7 +43,7 @@ class User {
       lastName: opts.lastName || randomUser.lastName,
       password: opts.password || randomUser.password
     };
-    const resp = await auth.register(userOpt);
+    const resp = await register(userOpt);
     userOpt.id = resp.body.user.id;
     userOpt.role = resp.body.user.role;
     userOpt.token = resp.body.token;
